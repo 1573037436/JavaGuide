@@ -8,7 +8,10 @@ import java.util.EventListener;
  */
 public class CusEventListener implements EventListener {
 
-	//事件发生后的回调方法 
+	/**
+	 * 事件发生后的回调方法
+	 * @param e
+	 */
 	public void fireCusEvent(CusEvent e){
 	        EventSourceObject eObject=(EventSourceObject)e.getSource();
 			System.out.println("My name has been changed!");

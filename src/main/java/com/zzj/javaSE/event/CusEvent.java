@@ -7,8 +7,12 @@ import java.util.EventObject;
  * @date 2020年1月7日
  */
 public class CusEvent extends EventObject {
-	private static final long serialVersionUID = 1L;  
-    private Object source;//事件源 
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 事件源
+	 */
+    private Object source;
+	@Override
 	public Object getSource() {
 		return source;
 	}

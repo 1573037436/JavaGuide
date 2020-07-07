@@ -23,6 +23,7 @@ import org.junit.Test;
  * 3.Function<T>函数型接口 R apply(T t)
  * 4.Predicate<T>断言型接口 用于做判断操作 boolean test(T t)
  */
+
 public class LambdaTest {
 	 //Consumer<T>
     @Test

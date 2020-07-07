@@ -11,18 +11,26 @@ import java.util.Set;
  */
 public class EventSourceObject{
 	private String name;
-	//监听器容器  list或set
+	/**
+	 * 监听器容器  list或set
+	 */
 	private Set<CusEventListener> listeners;
 	public EventSourceObject(){
 		super();
 		listeners=new HashSet<>();
 	}
-	
-	//给事件源注册监听器
+
+	/**
+	 * 给事件源注册监听器
+	 * @param cel
+	 */
 	public void addCusListener(CusEventListener cel){
 		listeners.add(cel);
 	}
-	//当事件发生时,通知注册在该事件源上的所有监听器做出相应的反应（调用回调方法）
+
+	/**
+	 * 当事件发生时,通知注册在该事件源上的所有监听器做出相应的反应（调用回调方法）
+	 */
 	protected void notifies(){
 		CusEventListener cel=null;
 		Iterator<CusEventListener> iter=listeners.iterator();
@@ -31,7 +39,10 @@ public class EventSourceObject{
 			cel.fireCusEvent(new CusEvent(this));
 		}
 	}
-	//模拟事件触发器，当成员变量name的值发生变化时，触发事件。
+	/**
+	 * 模拟事件触发器，当成员变量name的值发生变化时，触发事件。
+	 * @param name
+	 */
 	public void setName(String name) {
 		if (!name.equals(this.name)) {
 			this.name = name;
