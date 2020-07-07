@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--配置日志输出  -->
+	<settings>
+		<setting name="cacheEnabled" value="true" />
+		<setting name="useGeneratedKeys" value="true" />
+		<setting name="defaultExecutorType" value="REUSE" />
+		<setting name="logImpl" value="LOG4J" /><!--LOG4J,STDOUT_LOGGING  -->
+	</settings>
+	<typeAliases>
+		<!-- 在mybatis中， Student可以用在任何使用 com.zzj.javaSE.model.Student的地方。 但一般来说entity都会有很多， 
+			因此这样配置太繁琐了， mybatis支持指定包名， 会使用类的首字母小写的类限定名作为别名。 -->
+		<package name="com.zzj.javaSE.model" />
+	</typeAliases>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC">
+				<property name="" value="" />
+			</transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<!--默认或使用UTC时间会导致实际与写入数据库中的时间差八小时，UTC代表的是全球标准时间 ，但是我们使用的时间是北京时区也就是东八区，领先UTC八个小时  -->
+				<property name="url"
+					value="jdbc:mysql://localhost:3306/mybatis?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=Asia/Shanghai" />
+				<property name="username" value="root" />
+				<property name="password" value="root" />
+			</dataSource>
+		</environment>
+	</environments>
+	<!-- 配置mapper路径 -->
+	<mappers>
+		<mapper resource="mapper/StudentMapper.xml" />
+	</mappers>
+</configuration>

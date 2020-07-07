@@ -199,6 +199,7 @@ public class ScheduledThreadPoolExecutor
 
 **方式一：通过`ThreadPoolExecutor`构造函数实现（推荐）**
 ![通过构造方法实现](https://imgconvert.csdnimg.cn/aHR0cDovL215LWJsb2ctdG8tdXNlLm9zcy1jbi1iZWlqaW5nLmFsaXl1bmNzLmNvbS8xOC00LTE2LzE3ODU4MjMwLmpwZw?x-oss-process=image/format,png)
+
 **方式二：通过 Executor 框架的工具类 Executors 来实现**
 我们可以创建三种类型的 ThreadPoolExecutor：
 

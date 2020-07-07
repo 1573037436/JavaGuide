@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  命名空间配置DAO层接口-->
+<mapper namespace="com.zzj.javaEE.mybatis.StudentMapper">
+  <resultMap id="BaseResultMap" type="Student"><!--此处可以直接写Student是因为mybatis-config.xml中配置了<typeAliases>  -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="className" jdbcType="VARCHAR" property="className" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" javaType="java.util.Date" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, sex, number,className,createTime
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from student
+  </select>
+  <select id="findById" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from student where id=#{id}
+  </select>
+  <!-- 新增学生, 数据库增加语句： #传入的参数在SQL中显示为字符串，#方式能够很大程度防止sql注入；$传入的参数在SqL中直接显示为传入的值，$方式无法防止Sql注入。-->
+  <select id="addStudent" parameterType="Student"><!-- #{createTime,jdbcType=TIMESTAMP} -->
+    insert into student(name, sex, number,className,createTime) values(#{name},#{sex},#{number},#{className},#{createTime,jdbcType=TIMESTAMP})
+  </select>
+  <!--修改学生  -->
+  <select id="updateStudent" parameterType="Student">
+    update student set sex=#{sex},className=#{className} where name=#{name}
+  </select>
+  <!--删除学生  -->
+  <select id="deleteStudent" parameterType="int">
+    delete from student where id=#{id}
+  </select>
+  <!-- 动态sql: if -->
+<select id="findStudentWithNameLike" resultMap="BaseResultMap">
+  SELECT <include refid="Base_Column_List"></include>
+  FROM student
+  <if test="name != null">
+   WHERE name like #{name}
+  </if>
+</select>
+<!-- choose (when, otherwise) -->
+<select id="findStudentChoose"
+     resultType="Student">
+  SELECT <include  refid="Base_Column_List"/> 
+  FROM student WHERE 1=1
+  <choose>
+    <when test="name != null">
+      AND name like #{name}
+    </when>
+    <when test="createTime != null">
+      AND createTime &gt;=  &apos;2020-01-15 08:51:05&apos;
+    </when>
+    <otherwise>
+      AND createTime &lt;=  &apos;2020-01-15 09:32:24&apos;
+    </otherwise>
+  </choose>
+</select>
+<select id="findActiveAnd" resultType="Student">
+  SELECT * FROM student
+  <where><!--where 元素只会在至少有一个子元素的条件返回 SQL 子句的情况下才去插入"WHERE"子句。而且，若语句的开头为"AND"或"OR"，where 元素也会将它们去除  -->
+    <if test="createTime != null">
+         1=1 <!-- 此处不成立，会动态的保留and -->
+    </if>
+    <if test="name != null">
+        AND name like #{name}
+    </if>
+  </where>
+</select>
+<!-- trim (where, set) -->
+ <!-- 动态更新 -->
+  <update id="updateStudentIfNecessary">
+  update Student
+    <set>
+      <if test="name != null">name=#{name},</if>
+      <if test="className != null">className=#{className},</if>
+      <if test="createTime != null">createTime=#{createTime},</if>
+      <if test="sex != null">sex=#{sex}</if>
+    </set>
+  where id=#{id}
+</update>
+<!-- foreach -->
+<select id="selectStudentNameIn" resultType="Student">
+  SELECT *
+  FROM Student 
+  WHERE name in
+  <!--1:如果传入的是单参数且参数类型是一个List的时候，collection属性值为list 
+  2:如果传入的是单参数且参数类型是一个array数组的时候，collection的属性值为array  -->
+  <foreach item="name" index="index" collection="list"
+      open="(" separator="," close=")">
+        #{name}
+  </foreach>
+</select>
+
+<insert id="addStudentMapParam" parameterType="map">
+	insert into student
+  <foreach collection="keys" index="key" item="value" open="(" close=")" separator=",">
+       ${key} <!--此处用$,不要用#,这里是连接的需要，不是占位 -->
+    </foreach>
+    values
+    <foreach collection="keys" item="value1" open="(" close=")" separator=",">
+       #{value1}
+    </foreach>
+    <!-- 第二次foreach时，其实循环的顺序和第一次是一样的，因为此时map是一定的，并没有增删-->
+</insert>
+</mapper>
